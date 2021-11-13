@@ -1,9 +1,8 @@
-document.addEventListener("DOMContentLoaded", () => {
+window.addEventListener('DOMContentLoaded', () => {
   const Timer = (date) => {
-    const timerHour = document.querySelector("#timer-hours"),
-      timerMinutes = document.querySelector("#timer-minutes"),
-      timerSeconds = document.querySelector("#timer-seconds");
-    //   startDate = new Date(date);
+    const timerHour = document.querySelector('#timer-hours'),
+      timerMinutes = document.querySelector('#timer-minutes'),
+      timerSeconds = document.querySelector('#timer-seconds');
 
     const getTimerRemaining = (date) => {
       const nowDate = Date.now(),
@@ -43,5 +42,55 @@ document.addEventListener("DOMContentLoaded", () => {
     startTimer();
   };
 
-  Timer("14 November 2021");
+  Timer('14 November 2021');
+
+  const toggleMenu = () => {
+    const btnMenu = document.querySelector('.menu'),
+      closeMenu = document.querySelector('.close-btn'),
+      menu = document.querySelector('menu'),
+      menuItem = menu.querySelectorAll('ul>li');
+
+    const handlerMenu = () => menu.classList.toggle('active-menu');
+
+    btnMenu.addEventListener('click', () => handlerMenu());
+
+    closeMenu.addEventListener('click', () => handlerMenu());
+
+    menuItem.forEach((item) =>
+      item.addEventListener('click', () => handlerMenu())
+    );
+  };
+
+  toggleMenu();
+
+  const popup = () => {
+    const btnPopup = document.querySelectorAll('.popup-btn'),
+      closePopup = document.querySelector('.popup-close'),
+      popupModal = document.querySelector('.popup'),
+      popupContent = document.querySelector('.popup-content');
+
+    const modalAnimation = () => {
+      if (screen.width > 768) {
+        let start = 0;
+        requestAnimationFrame(function anim() {
+          popupContent.style.left = `${(start += 3)}%`;
+          start < 38 && requestAnimationFrame(anim);
+        });
+      }
+    };
+
+    btnPopup.forEach((item) => {
+      item.addEventListener('click', () => {
+        popupModal.style.display = 'block';
+        modalAnimation();
+      });
+    });
+
+    closePopup.addEventListener(
+      'click',
+      () => (popupModal.style.display = 'none')
+    );
+  };
+
+  popup();
 });
