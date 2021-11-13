@@ -3,15 +3,15 @@ document.addEventListener("DOMContentLoaded", () => {
     const timerHour = document.querySelector("#timer-hours"),
       timerMinutes = document.querySelector("#timer-minutes"),
       timerSeconds = document.querySelector("#timer-seconds");
+    //   startDate = new Date(date);
 
     const getTimerRemaining = (date) => {
-      const nowDate = new Date().getTime(),
+      const nowDate = Date.now(),
         stopDate = new Date(date).getTime(),
         remaining = (stopDate - nowDate) / 1000,
         seconds = Math.floor(remaining % 60),
         minutes = Math.floor((remaining / 60) % 60),
         hour = Math.floor(remaining / 60 / 60);
-
       return { remaining, hour, minutes, seconds };
     };
 
@@ -19,7 +19,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const timer = getTimerRemaining(date);
 
       if (timer.remaining < 0) {
-        clearInterval(startTimer);
+        restart();
       } else {
         timerHour.textContent = timer.hour > 9 ? timer.hour : `0${timer.hour}`;
         timerMinutes.textContent =
@@ -29,7 +29,18 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     };
 
-    const startTimer = setInterval(updateClock, 1000);
+    function startTimer() {
+      setInterval(updateClock, 1000);
+    }
+
+    function restart() {
+      date = new Date();
+      clearInterval(startTimer);
+      getTimerRemaining(date.setDate(date.getDate() + 1));
+      startTimer();
+    }
+
+    startTimer();
   };
 
   Timer("14 November 2021");
