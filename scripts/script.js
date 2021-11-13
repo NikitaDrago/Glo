@@ -47,8 +47,7 @@ window.addEventListener('DOMContentLoaded', () => {
   const toggleMenu = () => {
     const btnMenu = document.querySelector('.menu'),
       menu = document.querySelector('menu'),
-      menuItem = menu.querySelectorAll('ul>li'),
-      activeMenu = document.querySelector('menu');
+      menuItem = menu.querySelectorAll('ul>li');
 
     const smoothScroll = (item) => {
       const anchors = item.getAttribute('href').substr(1);
@@ -60,23 +59,30 @@ window.addEventListener('DOMContentLoaded', () => {
 
     const handleMenu = () => menu.classList.toggle('active-menu');
 
-    btnMenu.addEventListener('click', () => handleMenu());
+    document.body.addEventListener('click', (e) => {
+      const target = e.target,
+        targetMenu = target.closest('menu'),
+        targetButton = e.target.closest('.menu');
 
-    activeMenu.addEventListener('click', (event) => {
-      const target = event.target;
+      targetButton === btnMenu && handleMenu();
+
+      if (!targetMenu && !(targetButton === btnMenu)) {
+        menu.classList.remove('active-menu');
+      }
+
+      e.preventDefault();
 
       if (target.classList.contains('close-btn')) {
         handleMenu();
       }
 
-      event.preventDefault();
-
       menuItem.forEach((item, i) => {
-        if (item.childNodes[0] === target.closest('a')) {
+        if (item.childNodes[0] === target) {
           handleMenu();
-          smoothScroll(item.childNodes[0]);
+          smoothScroll(target);
         }
       });
+
     });
   };
 
