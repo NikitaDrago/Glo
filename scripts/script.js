@@ -48,17 +48,40 @@ window.addEventListener('DOMContentLoaded', () => {
     const btnMenu = document.querySelector('.menu'),
       closeMenu = document.querySelector('.close-btn'),
       menu = document.querySelector('menu'),
-      menuItem = menu.querySelectorAll('ul>li');
+      menuItem = menu.querySelectorAll('ul>li'),
+      scrollWidget = document.querySelector('main>a');
 
-    const handlerMenu = () => menu.classList.toggle('active-menu');
+    const smoothScroll = (item) => {
+      console.log(item);
+      const anchors = document
+        .querySelector('a[href*="#"]')
+        .getAttribute('href')
+        .substr(1);
 
-    btnMenu.addEventListener('click', () => handlerMenu());
+      document.querySelector(`#${anchors}`).scrollIntoView({
+        behavior: 'smooth',
+        block: 'start',
+      });
+    };
 
-    closeMenu.addEventListener('click', () => handlerMenu());
+    const handleMenu = () => menu.classList.toggle('active-menu');
+
+    btnMenu.addEventListener('click', () => handleMenu());
+
+    closeMenu.addEventListener('click', () => handleMenu());
 
     menuItem.forEach((item) =>
-      item.addEventListener('click', () => handlerMenu())
+      item.addEventListener('click', (e) => {
+        e.preventDefault();
+        handleMenu();
+        smoothScroll(item);
+      })
     );
+
+    scrollWidget.addEventListener('click', (e) => {
+      e.preventDefault();
+      smoothScroll(scrollWidget);
+    });
   };
 
   toggleMenu();
