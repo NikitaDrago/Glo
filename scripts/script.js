@@ -230,5 +230,34 @@ window.addEventListener('DOMContentLoaded', () => {
 
     startSlider(1500);
   };
+
   slider();
+
+  const comand = () => {
+    const photo = document.querySelectorAll('.command__photo');
+
+    photo.forEach((item, i) => {
+      const attribute = item.getAttribute('src');
+
+      item.addEventListener('mouseover', (e) => {
+        e.target.src = e.target.dataset.img;
+      });
+      item.addEventListener('mouseout', (e) => {
+        e.target.src = attribute;
+      });
+    });
+  };
+
+  comand();
+
+  const calcValidate = () => {
+    const calcItem = document.querySelectorAll('.calc-item');
+
+    calcItem.forEach((item) => {
+      item.addEventListener('input', (event) => {
+        event.target.value = event.target.value.replace(/\D/g, '');
+      });
+    });
+  };
+  calcValidate();
 });
