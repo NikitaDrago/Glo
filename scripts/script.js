@@ -42,7 +42,7 @@ window.addEventListener('DOMContentLoaded', () => {
     startTimer();
   };
 
-  Timer('14 November 2021');
+  Timer('16 November 2021');
 
   const toggleMenu = () => {
     const btnMenu = document.querySelector('.menu'),
@@ -309,7 +309,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
     calcBlock.addEventListener('change', (event) => {
       const target = event.target;
-      
+
       if (target.matches('select') || target.matches('input')) {
         countSum();
       }
@@ -317,4 +317,76 @@ window.addEventListener('DOMContentLoaded', () => {
   };
 
   calc(100);
+
+  const sendForm = () => {
+    const errorMessage = 'Что-то пошло не так...',
+      loadMessage = 'Загрузка...',
+      succesMesaage = 'Спасибо! Мы скоро свяжемся!';
+
+    const statusMessage = document.createElement('div');
+    statusMessage.style.cssText = 'font-size: 2rem; color: #fff';
+
+    const postData = (body, outputData, errorData) => {
+      const request = new XMLHttpRequest();
+
+      request.addEventListener('readystatechange', () => {
+        if (request.readyState !== 4) {
+          return;
+        }
+        if (request.status === 200) {
+          outputData();
+        } else {
+          errorData(request.status);
+        }
+      });
+
+      request.open('POST', './server.php');
+      request.setRequestHeader('Content-Type', 'applications/json');
+      request.send(JSON.stringify(body));
+    };
+
+    const getData = (form) => {
+      form.appendChild(statusMessage);
+      statusMessage.textContent = loadMessage;
+
+      const formData = new FormData(form);
+      const body = {};
+
+      formData.forEach((item, key) => {
+        body[key] = item;
+      });
+
+      postData(
+        body,
+        () => {
+          statusMessage.textContent = succesMesaage;
+        },
+        (error) => {
+          statusMessage.textContent = errorMessage;
+          console.error(error);
+        }
+      );
+    };
+
+    const clearInputs = (inputs) => {
+      inputs.forEach((item) => (item.value = ''));
+    };
+
+    document.addEventListener('click', (e) => {
+      const target = e.target,
+        form = target.closest('form');
+
+      e.preventDefault();
+
+      if (form) {
+        const inputs = form.querySelectorAll('input');
+
+        getData(form);
+        clearInputs(inputs);
+      }
+    });
+  };
+
+  sendForm();
+
 });
