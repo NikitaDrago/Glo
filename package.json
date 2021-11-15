@@ -1,0 +1,27 @@
+{
+  "name": "glo",
+  "version": "1.0.0",
+  "description": "",
+  "private": "true",
+  "scripts": {
+    "start": "webpack serve --open --mode=development",
+    "build": "webpack --mode=production"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.14.6",
+    "@babel/preset-env": "^7.14.7",
+    "babel-loader": "^8.2.2",
+    "path": "^0.12.7",
+    "webpack": "^5.45.1",
+    "webpack-cli": "^4.7.2",
+    "webpack-dev-server": "^3.11.2"
+  },
+  "dependencies": {
+    "@babel/polyfill": "^7.12.1",
+    "element-closest": "^3.0.2",
+    "es6-promise": "^4.2.8",
+    "fetch-polyfill": "^0.8.2",
+    "formdata-polyfill": "^4.0.10",
+    "nodelist-foreach-polyfill": "^1.2.0"
+  }
+}
