@@ -11,7 +11,12 @@ window.addEventListener('DOMContentLoaded', () => {
         seconds = Math.floor(remaining % 60),
         minutes = Math.floor((remaining / 60) % 60),
         hour = Math.floor(remaining / 60 / 60);
-      return { remaining, hour, minutes, seconds };
+      return {
+        remaining,
+        hour,
+        minutes,
+        seconds
+      };
     };
 
     const updateClock = () => {
@@ -326,23 +331,25 @@ window.addEventListener('DOMContentLoaded', () => {
     const statusMessage = document.createElement('div');
     statusMessage.style.cssText = 'font-size: 2rem; color: #fff';
 
-    const postData = (body, outputData, errorData) => {
-      const request = new XMLHttpRequest();
+    const postData = (body) => {
+      return new Promise((resolve, reject) => {
+        const request = new XMLHttpRequest();
 
-      request.addEventListener('readystatechange', () => {
-        if (request.readyState !== 4) {
-          return;
-        }
-        if (request.status === 200) {
-          outputData();
-        } else {
-          errorData(request.status);
-        }
-      });
+        request.addEventListener('readystatechange', () => {
+          if (request.readyState !== 4) {
+            return;
+          }
+          if (request.status === 200) {
+            resolve();
+          } else {
+            reject(request.status);
+          }
+        });
 
-      request.open('POST', './server.php');
-      request.setRequestHeader('Content-Type', 'applications/json');
-      request.send(JSON.stringify(body));
+        request.open('POST', './server.php');
+        request.setRequestHeader('Content-Type', 'applications/json');
+        request.send(JSON.stringify(body));
+      })
     };
 
     const getData = (form) => {
@@ -356,16 +363,9 @@ window.addEventListener('DOMContentLoaded', () => {
         body[key] = item;
       });
 
-      postData(
-        body,
-        () => {
-          statusMessage.textContent = succesMesaage;
-        },
-        (error) => {
-          statusMessage.textContent = errorMessage;
-          console.error(error);
-        }
-      );
+      postData(body)
+        .then(() => statusMessage.textContent = succesMesaage)
+        .catch(() => statusMessage.textContent = errorMessage);
     };
 
     const clearInputs = (inputs) => {
