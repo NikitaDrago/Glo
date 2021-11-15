@@ -109,6 +109,9 @@ window.addEventListener('DOMContentLoaded', () => {
       const target = event.target;
 
       if (target.classList.contains('popup-close')) {
+        const requestMSG = document.querySelector('.request-message');
+        requestMSG && requestMSG.remove();
+
         popupModal.style.display = 'none';
       }
       if (!target.closest('.popup-content')) {
@@ -330,58 +333,54 @@ window.addEventListener('DOMContentLoaded', () => {
 
     const statusMessage = document.createElement('div');
     statusMessage.style.cssText = 'font-size: 2rem; color: #fff';
-
-    const postData = (body) => {
-      return new Promise((resolve, reject) => {
-        const request = new XMLHttpRequest();
-
-        request.addEventListener('readystatechange', () => {
-          if (request.readyState !== 4) {
-            return;
-          }
-          if (request.status === 200) {
-            resolve();
-          } else {
-            reject(request.status);
-          }
-        });
-
-        request.open('POST', './server.php');
-        request.setRequestHeader('Content-Type', 'applications/json');
-        request.send(JSON.stringify(body));
-      })
-    };
-
-    const getData = (form) => {
-      form.appendChild(statusMessage);
-      statusMessage.textContent = loadMessage;
-
-      const formData = new FormData(form);
-      const body = {};
-
-      formData.forEach((item, key) => {
-        body[key] = item;
-      });
-
-      postData(body)
-        .then(() => statusMessage.textContent = succesMesaage)
-        .catch(() => statusMessage.textContent = errorMessage);
-    };
+    statusMessage.classList.add('request-message');
 
     const clearInputs = (inputs) => {
       inputs.forEach((item) => (item.value = ''));
     };
 
+
+    const postData = (data) => {
+      return fetch('./server.php', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        },
+        body: JSON.stringify(data),
+      });
+    };
+
+    const getData = (form) => {
+
+      form.appendChild(statusMessage);
+
+      const formData = new FormData(form);
+      const body = {};
+      formData.forEach((item, key) => {
+        body[key] = item;
+      })
+
+      if (!body) return
+
+      statusMessage.textContent = loadMessage;
+
+      postData(formData)
+        .then((response) => {
+          if (response.status !== 200) {
+            throw new Error('status network not 200');
+          };
+          statusMessage.textContent = succesMesaage;
+        })
+        .catch(() => statusMessage.textContent = errorMessage);
+    };
+
     document.addEventListener('click', (e) => {
-      const target = e.target,
-        form = target.closest('form');
+      if (e.target.classList.contains('form-btn') && e.target.closest('form')) {
+        e.preventDefault();
 
-      e.preventDefault();
+        const inputs = e.target.closest('form').querySelectorAll('input');
 
-      if (form) {
-        const inputs = form.querySelectorAll('input');
-
-        getData(form);
+        getData(e.target.closest('form'));
         clearInputs(inputs);
       }
     });
