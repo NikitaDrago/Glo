@@ -1,5 +1,3 @@
-import toggleMenu from "./toggleMenu";
-
 const togglePopup = () => {
     const btnPopup = document.querySelectorAll('.popup-btn'),
         popupModal = document.querySelector('.popup'),
@@ -37,4 +35,4 @@ const togglePopup = () => {
     });
 };
 
-export default toggleMenu;
+export default togglePopup;

@@ -1,7 +1,5 @@
 const toggleMenu = () => {
-    const btnMenu = document.querySelector('.menu'),
-        menu = document.querySelector('menu'),
-        menuItem = menu.querySelectorAll('ul>li');
+    const menu = document.querySelector('menu');
 
     const smoothScroll = (item) => {
         const anchors = item.getAttribute('href').substr(1);
@@ -24,7 +22,7 @@ const toggleMenu = () => {
         if (target.closest('a') && target.closest('menu')) {
             handleMenu();
             smoothScroll(target.closest('a'));
-        } else if (target.closest('a')) {
+        } else if (target.closest('a') && target.closest('main')) {
             smoothScroll(target.closest('a'));
         }
     });

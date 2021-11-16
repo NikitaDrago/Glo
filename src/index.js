@@ -6,15 +6,15 @@ import 'formdata-polyfill';
 import 'es6-promise';
 import 'fetch-polyfill';
 
-import calc from './modules/calc';
-import calcValidate from './modules/calcValidate.js'
-import comand from './modules/comand';
 import Timer from './modules/Timer';
-import sendForm from './modules/sendForm';
-import slider from './modules/slider';
-import tabs from './modules/tabs';
 import toggleMenu from './modules/toggleMenu';
 import togglePopup from './modules/togglePopup';
+import tabs from './modules/tabs';
+import slider from './modules/slider';
+import comand from './modules/comand';
+import calcValidate from './modules/calcValidate.js'
+import calc from './modules/calc';
+import sendForm from './modules/sendForm';
 
 Timer('16 November 2021');
 toggleMenu();
