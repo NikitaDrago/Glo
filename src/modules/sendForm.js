@@ -31,7 +31,6 @@ const sendForm = () => {
         formData.forEach((item, key) => {
             body[key] = item;
         })
-
         if (!body) return
 
         statusMessage.textContent = loadMessage;

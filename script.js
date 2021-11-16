@@ -37,9 +37,9 @@ const Timer = (date) => {
     }
 
     function restart() {
-        date = new Date();
+        date = new Date().setHours(24, 0, 0);
         clearInterval(startTimer);
-        getTimerRemaining(date.setDate(date.getDate() + 1));
+        getTimerRemaining(date);
         startTimer();
     }
 
@@ -340,8 +340,9 @@ const sendForm = () => {
         const body = {};
         formData.forEach((item, key) => {
             body[key] = item;
+            console.log(key + ' ' + item)
         })
-
+        
         if (!body) return
 
         statusMessage.textContent = loadMessage;
